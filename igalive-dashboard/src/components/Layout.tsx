@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { ReactNode } from 'react';
-
+import Image from 'next/image';
 interface LayoutProps {
   children: ReactNode;
 }
@@ -65,9 +65,17 @@ export default function Layout({ children }: LayoutProps) {
         <div className="flex h-full flex-col">
           {/* Logo */}
           <div className="flex h-16 items-center justify-center border-b border-gray-200">
-            <div className="flex items-center space-x-2">
-              <School className="h-8 w-8 text-emerald-600" />
-              <span className="text-xl font-bold text-gray-900">IgaLive Admin</span>
+          <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 rounded-full overflow-hidden">
+                <Image 
+                  src="/emerald.jpg" 
+                  alt="IgaLive Logo" 
+                  width={32} 
+                  height={32} 
+                  className="object-cover w-full h-full"
+                />
+              </div>
+              <span className="text-xl font-bold text-gray-900">igaLive Admin</span>
             </div>
           </div>
 
