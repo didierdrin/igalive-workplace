@@ -1,0 +1,91 @@
+name: Build Android APK and App Bundle
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.24.3'  # Use the latest stable version
+        channel: 'stable'
+        cache: true
+        
+    - name: Get Flutter dependencies
+      run: |
+        cd igalive
+        flutter pub get
+        
+    - name: Verify Flutter installation
+      run: |
+        cd igalive
+        flutter doctor -v
+        
+    - name: Run Flutter tests
+      run: |
+        cd igalive
+        flutter test
+        
+    - name: Build APK (Debug)
+      run: |
+        cd igalive
+        flutter build apk --debug
+        
+    - name: Build APK (Release)
+      run: |
+        cd igalive
+        flutter build apk --release
+        
+    - name: Build App Bundle (Release)
+      run: |
+        cd igalive
+        flutter build appbundle --release
+        
+    - name: Upload APK (Debug) Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: igalive-debug-apk
+        path: igalive/build/app/outputs/flutter-apk/app-debug.apk
+        
+    - name: Upload APK (Release) Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: igalive-release-apk
+        path: igalive/build/app/outputs/flutter-apk/app-release.apk
+        
+    - name: Upload App Bundle Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: igalive-app-bundle
+        path: igalive/build/app/outputs/bundle/release/app-release.aab
+        
+    - name: Generate build info
+      run: |
+        cd igalive
+        echo "Build completed at: $(date)" > build_info.txt
+        echo "Flutter version: $(flutter --version | head -n 1)" >> build_info.txt
+        echo "Commit: ${GITHUB_SHA}" >> build_info.txt
+        echo "Branch: ${GITHUB_REF_NAME}" >> build_info.txt
+        
+    - name: Upload build info
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-info
+        path: igalive/build_info.txt
