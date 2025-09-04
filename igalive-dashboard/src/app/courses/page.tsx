@@ -5,7 +5,7 @@ import { collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc } from '
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { db, storage } from '../../lib/firebase';
 import { extractTextFromPDF, createLessonsFromExtractedContent } from '../../lib/pdf-utils';
-import { Plus, Search, Edit, Trash2, Upload, FileText } from 'lucide-react';
+import { Plus, Search, Edit, Trash2, Upload, FileText, Book } from 'lucide-react';
 import toast, { Toaster } from 'react-hot-toast';
 
 interface Course {
