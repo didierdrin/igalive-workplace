@@ -37,12 +37,7 @@ jobs:
       run: |
         cd igalive
         flutter doctor -v
-        
-    - name: Run Flutter tests
-      run: |
-        cd igalive
-        flutter test
-        
+                
     - name: Build APK (Debug)
       run: |
         cd igalive

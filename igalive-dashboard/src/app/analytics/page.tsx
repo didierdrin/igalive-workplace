@@ -5,8 +5,48 @@ import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../lib/firebase';
 import { BarChart3, TrendingUp, Users, Book } from 'lucide-react';
 
+// Define interfaces based on your Flutter models
+interface Course {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  category: 'nursery' | 'mathSciences' | 'artsHumanities' | 'languages';
+  lessons?: Lesson[];
+  createdAt: string;
+  instructor: string;
+}
+
+interface Lesson {
+  id: string;
+  title: string;
+  content: string;
+  videoUrl?: string;
+  duration: number;
+  order: number;
+  createdAt: string;
+}
+
+interface User {
+  id: string;
+  email: string;
+  name: string;
+  profileImageUrl?: string;
+  createdAt: string;
+  enrolledCourses?: string[];
+}
+
+interface CourseWithEnrollments extends Course {
+  enrollments: number;
+}
+
 export default function AnalyticsPage() {
-  const [analytics, setAnalytics] = useState({
+  const [analytics, setAnalytics] = useState<{
+    categoryDistribution: Record<string, number>;
+    enrollmentTrends: Record<string, any>;
+    popularCourses: CourseWithEnrollments[];
+    studentGrowth: number;
+  }>({
     categoryDistribution: {},
     enrollmentTrends: {},
     popularCourses: [],
@@ -19,20 +59,26 @@ export default function AnalyticsPage() {
       try {
         // Get courses
         const coursesSnapshot = await getDocs(collection(db, 'iga_courses'));
-        const courses = coursesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const courses: Course[] = coursesSnapshot.docs.map(doc => ({ 
+          id: doc.id, 
+          ...doc.data() 
+        } as Course));
         
         // Get students
         const studentsSnapshot = await getDocs(collection(db, 'iga_users'));
-        const students = studentsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const students: User[] = studentsSnapshot.docs.map(doc => ({ 
+          id: doc.id, 
+          ...doc.data() 
+        } as User));
 
         // Calculate category distribution
-        const categoryDist = courses.reduce((acc: any, course) => {
+        const categoryDist = courses.reduce((acc: Record<string, number>, course) => {
           acc[course.category] = (acc[course.category] || 0) + 1;
           return acc;
         }, {});
 
         // Calculate popular courses
-        const courseEnrollments = courses.map(course => {
+        const courseEnrollments: CourseWithEnrollments[] = courses.map(course => {
           const enrollmentCount = students.filter(student => 
             student.enrolledCourses?.includes(course.id)
           ).length;
