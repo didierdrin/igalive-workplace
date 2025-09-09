@@ -92,7 +92,7 @@ export default async function Home() {
   return (
     <div className="font-sans min-h-screen p-8 sm:p-12 flex flex-col bg-gradient-to-b from-white to-emerald-200">
       <header className="mb-8 flex items-center gap-3">
-        <img src="/globe.svg" alt="igaLive" className="h-8 w-8 dark:invert" />
+        <img src="/igalive-icon.png" alt="igaLive" className="h-8 w-8 dark:invert" />
         <h1 className="text-2xl font-semibold tracking-tight">igaLive Mobile App Downloads</h1>
       </header>
 
