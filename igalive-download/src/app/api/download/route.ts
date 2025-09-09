@@ -3,12 +3,12 @@ import path from "node:path";
 import fs from "node:fs/promises";
 
 // Placeholder auth: allow all. Replace with real auth integration.
-async function ensureAuthorized(_req: NextRequest): Promise<boolean> {
+async function ensureAuthorized(): Promise<boolean> {
   return true;
 }
 
 export async function GET(req: NextRequest) {
-  const authorized = await ensureAuthorized(req);
+  const authorized = await ensureAuthorized();
   if (!authorized) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -30,7 +30,7 @@ export async function GET(req: NextRequest) {
     const data = await fs.readFile(absolutePath);
     const fileName = path.basename(absolutePath);
 
-    return new NextResponse(data, {
+    return new NextResponse(new Uint8Array(data), {
       status: 200,
       headers: new Headers({
         "Content-Type": "application/vnd.android.package-archive",
