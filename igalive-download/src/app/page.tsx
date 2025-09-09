@@ -90,7 +90,7 @@ export default async function Home() {
   }, { "Student Portal": [], "Instructor Tools": [], "Course Materials": [], "Administrative": [], "Other": [] });
 
   return (
-    <div className="font-sans min-h-screen p-8 sm:p-12">
+    <div className="font-sans min-h-screen p-8 sm:p-12 flex flex-col">
       <header className="mb-8 flex items-center gap-3">
         <img src="/globe.svg" alt="igaLive" className="h-8 w-8 dark:invert" />
         <h1 className="text-2xl font-semibold tracking-tight">igaLive Mobile App Downloads</h1>
@@ -110,7 +110,7 @@ export default async function Home() {
                       <div className="flex items-start justify-between">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="text-base font-semibold">{app.name}</span>
+                            <span className="text-base font-semibold">igaLive</span>
                             {app.isFlagship && (
                               <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-600 text-white">Flagship</span>
                             )}
@@ -141,8 +141,8 @@ export default async function Home() {
         </div>
       )}
 
-      <footer className="mt-16 text-center text-xs text-gray-500">
-        Authorized igaLive members only. Access may be audited.
+      <footer className="mt-auto text-center text-xs text-gray-500">
+        Copyright © 2025 igaLive. Access may be audited.
       </footer>
     </div>
   );
